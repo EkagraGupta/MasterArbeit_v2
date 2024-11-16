@@ -145,28 +145,28 @@ class CustomTrivialAugmentWide(torch.nn.Module):
     def _augmentation_space(self, num_bins: int) -> Dict[str, Tuple[Tensor, bool]]:
         return {
             "Identity": (torch.tensor(0.0), False),
-            "ShearX": (torch.linspace(0.0, 0.99, num_bins), True),
-            "ShearY": (torch.linspace(0.0, 0.99, num_bins), True),
-            "TranslateX": (torch.linspace(0.0, 32.0, num_bins), True),
-            "TranslateY": (torch.linspace(0.0, 32.0, num_bins), True),
-            "Rotate": (torch.linspace(0.0, 135.0, num_bins), True),
+            # "ShearX": (torch.linspace(0.0, 0.99, num_bins), True),
+            # "ShearY": (torch.linspace(0.0, 0.99, num_bins), True),
+            # "TranslateX": (torch.linspace(0.0, 32.0, num_bins), True),
+            # "TranslateY": (torch.linspace(0.0, 32.0, num_bins), True),
+            # "Rotate": (torch.linspace(0.0, 135.0, num_bins), True),
             "Brightness": (torch.linspace(0.0, 0.99, num_bins), True),
-            "Color": (torch.linspace(0.0, 0.99, num_bins), True),
-            "Contrast": (torch.linspace(0.0, 0.99, num_bins), True),
-            "Sharpness": (torch.linspace(0.0, 0.99, num_bins), True),
-            "Posterize": (
-                8 - (torch.arange(num_bins) / ((num_bins - 1) / 6)).round().int(),
-                False,
-            ),
-            "Solarize": (torch.linspace(255.0, 0.0, num_bins), False),
-            "AutoContrast": (torch.tensor(0.0), False),
-            "Equalize": (torch.tensor(0.0), False),
+            # "Color": (torch.linspace(0.0, 0.99, num_bins), True),
+            # "Contrast": (torch.linspace(0.0, 0.99, num_bins), True),
+            # "Sharpness": (torch.linspace(0.0, 0.99, num_bins), True),
+            # "Posterize": (
+            #     8 - (torch.arange(num_bins) / ((num_bins - 1) / 6)).round().int(),
+            #     False,
+            # ),
+            # "Solarize": (torch.linspace(255.0, 0.0, num_bins), False),
+            # "AutoContrast": (torch.tensor(0.0), False),
+            # "Equalize": (torch.tensor(0.0), False),
         }
 
         # print(f'augmentation_name: {self.augmentation_name}\tseverity: {self.severity}')
         # if self.augmentation_name == "Identity":
         #     return {"Identity": (torch.tensor(0.0), False)}
-        # elif self.augmentation_name == "ShearX":
+        # if self.augmentation_name == "ShearX":
         #     return {"ShearX": (torch.linspace(0.0, 0.99, num_bins), True)}
         # elif self.augmentation_name == "ShearY":
         #     return {"ShearY": (torch.linspace(0.0, 0.99, num_bins), True)}
@@ -583,7 +583,7 @@ class CustomTrivialAugmentWide(torch.nn.Module):
             to_tensor = transforms.Compose([transforms.ToTensor()])
             augment_im = to_tensor(augment_im)
 
-        # print(f'\nAugmentation info: {augment_info}\tconf: {confidence_aa}\n')
+        print(f'\nAugmentation info: {augment_info}\tconf: {confidence_aa}\n')
         return augment_im, [augmentation_magnitude, confidence_aa]
 
     def __call__(

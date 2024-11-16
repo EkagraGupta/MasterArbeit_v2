@@ -311,14 +311,14 @@ def seed_worker(worker_id):
 
 if __name__ == "__main__":
 
-    batch_size = 25
+    batch_size = 5
     DATASET_NAME = "CIFAR10"
 
     g = torch.Generator()
     g.manual_seed(1)
 
     transforms_preprocess, transforms_augmentation = create_transforms(
-        random_cropping=True,
+        random_cropping=False,
         aggressive_augmentation=True,
         custom=True,
         augmentation_name="Brightness",
