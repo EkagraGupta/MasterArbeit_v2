@@ -3,7 +3,7 @@ from torchvision import transforms
 from typing import Optional
 from PIL import Image
 
-from compute_prob import ComputeProb
+# from compute_prob import ComputeProb
 
 
 class SoftCrop:
