@@ -137,17 +137,26 @@ def create_transforms(
     ]
 
     if aggressive_augmentation:
-        if custom:
-            augmentations.append(
-                CustomTrivialAugmentWide(
-                    custom=custom,
-                    augmentation_name=augmentation_name,
-                    severity=augmentation_severity,
-                    get_signed=augmentation_sign,
-                    dataset_name=dataset_name
-                ))
-        else:
-            augmentations.extend([transforms.TrivialAugmentWide(), transforms.ToTensor()])
+        # if custom:
+        #     augmentations.append(
+        #         CustomTrivialAugmentWide(
+        #             custom=custom,
+        #             augmentation_name=augmentation_name,
+        #             severity=augmentation_severity,
+        #             get_signed=augmentation_sign,
+        #             dataset_name=dataset_name
+        #         ))
+        # else:
+        #     augmentations.extend([transforms.TrivialAugmentWide(), transforms.ToTensor()])
+
+        augmentations.append(
+            CustomTrivialAugmentWide(
+                custom=custom,
+                augmentation_name=augmentation_name,
+                severity=augmentation_severity,
+                get_signed=augmentation_sign,
+                dataset_name=dataset_name
+            ))
         
 
     # custom_trivial_augment = CustomTrivialAugmentWide(
@@ -320,7 +329,7 @@ if __name__ == "__main__":
     transforms_preprocess, transforms_augmentation = create_transforms(
         random_cropping=False,
         aggressive_augmentation=True,
-        custom=True,
+        custom=False,
         augmentation_name="Brightness",
         augmentation_severity=15,
         augmentation_sign=True,
