@@ -398,19 +398,19 @@ class CustomTrivialAugmentWide(torch.nn.Module):
             # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
 
             """Mapping function from Contrast HVS"""
-            k_neg, k_pos = 20, 3                # 10, 20  
-            chance_pos = 0.976                  # model_acc[-1]
-            chance_neg = 0.32                   # 0.102, 0.32
-            if augmentation_magnitude>0.0:
-                confidence_aa = 1 - (1 - chance_pos) * (augmentation_magnitude) ** k_pos
-            else:
-                confidence_aa = 1 - (1 - chance_neg) * (abs(augmentation_magnitude)) ** k_neg
+            # k_neg, k_pos = 20, 3                # 10, 20  
+            # chance_pos = 0.976                  # model_acc[-1]
+            # chance_neg = 0.32                   # 0.102, 0.32
+            # if augmentation_magnitude>0.0:
+            #     confidence_aa = 1 - (1 - chance_pos) * (augmentation_magnitude) ** k_pos
+            # else:
+            #     confidence_aa = 1 - (1 - chance_neg) * (abs(augmentation_magnitude)) ** k_neg
 
             """Exact Contrast HVS"""
-            # if augmentation_magnitude>0.0:
-            #     confidence_aa = 1.0
-            # else:
-            #     confidence_aa = contrast_hvs[::-1][augmentation_idx]
+            if augmentation_magnitude>0.0:
+                confidence_aa = 1.0
+            else:
+                confidence_aa = contrast_hvs[::-1][augmentation_idx]
 
         elif augmentation_type == "Color":
             """Custom Sigmoid Function"""
