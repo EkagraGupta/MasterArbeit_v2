@@ -148,8 +148,8 @@ class CustomTrivialAugmentWide(torch.nn.Module):
             # "ShearX": (torch.linspace(0.0, 0.99, num_bins), True),
             # "ShearY": (torch.linspace(0.0, 0.99, num_bins), True),
             # "TranslateX": (torch.linspace(0.0, 32.0, num_bins), True),
-            "TranslateY": (torch.linspace(0.0, 32.0, num_bins), True),
-            # "Rotate": (torch.linspace(0.0, 135.0, num_bins), True),
+            # "TranslateY": (torch.linspace(0.0, 32.0, num_bins), True),
+            "Rotate": (torch.linspace(0.0, 135.0, num_bins), True),
             # "Brightness": (torch.linspace(0.0, 0.99, num_bins), True),
             # "Color": (torch.linspace(0.0, 0.99, num_bins), True),
             # "Contrast": (torch.linspace(0.0, 0.99, num_bins), True),
@@ -488,26 +488,26 @@ class CustomTrivialAugmentWide(torch.nn.Module):
         # #     chance = 0.512  # 0.512, 0.1
         # #     confidence_aa = 1 - (1 - chance) * (1 - augmentation_magnitude_normalized) ** k
 
-        # elif augmentation_type == "Rotate":  # HVS Available
-        #     """Custom Gaussian Function"""
-        #     # confidence_aa = comparison_metrics.gaussian(
-        #     #     augmentation_magnitude,
-        #     #     a=5.83337531e-01,
-        #     #     b=-5.36740882e-03,
-        #     #     c=2.16250254e01,
-        #     #     d=4.16662431e-01,
-        #     # )
+        elif augmentation_type == "Rotate":  # HVS Available
+            """Custom Gaussian Function"""
+            # confidence_aa = comparison_metrics.gaussian(
+            #     augmentation_magnitude,
+            #     a=5.83337531e-01,
+            #     b=-5.36740882e-03,
+            #     c=2.16250254e01,
+            #     d=4.16662431e-01,
+            # )
 
-        #     """Exact Model Accuracy"""
-        #     # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
 
-        #     """Mapping function from Rotation HVS"""
-        #     # k = 3  # 2, 3
-        #     # chance = 0.9315 # 0.9315, 0.2
-        #     # confidence_aa = 1 - (1 - chance) * (abs(augmentation_magnitude) / 135.0) ** k
+            """Mapping function from Rotation HVS"""
+            # k = 3  # 2, 3
+            # chance = 0.9315 # 0.9315, 0.2
+            # confidence_aa = 1 - (1 - chance) * (abs(augmentation_magnitude) / 135.0) ** k
 
-        #     """Exact Rotation HVS"""
-        #     confidence_aa = rotation_hvs[augmentation_idx]
+            """Exact Rotation HVS"""
+            confidence_aa = rotation_hvs[augmentation_idx]
 
         # elif augmentation_type == "Equalize":
         #     # confidence_aa = comparison_metrics.multiscale_structural_similarity(
