@@ -332,37 +332,37 @@ class CustomTrivialAugmentWide(torch.nn.Module):
         #     """Exact Rotation HVS"""
         #     # confidence_aa = rotation_hvs[augmentation_idx]
 
-        # if augmentation_type == "TranslateX":  # HVS Available
-        #     """Exact Model Accuracy"""
-        #     # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+        if augmentation_type == "TranslateX":  # HVS Available
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
 
-        #     """Mapping function from Translation HVS"""
-        #     # dim1, dim2 = im.size[0], im.size[1]
-        #     # visibility = random_crop.compute_visibility(
-        #     #     dim1=dim1, dim2=dim2, tx=augmentation_magnitude, ty=0
-        #     # )
-        #     # k = 4               # 2, 4
-        #     # chance = 0.216        # 0.216, 0.1
-        #     # confidence_aa = 1 - (1 - chance) * (1 - visibility) ** k
+            """Mapping function from Translation HVS"""
+            # dim1, dim2 = im.size[0], im.size[1]
+            # visibility = random_crop.compute_visibility(
+            #     dim1=dim1, dim2=dim2, tx=augmentation_magnitude, ty=0
+            # )
+            # k = 4               # 2, 4
+            # chance = 0.216        # 0.216, 0.1
+            # confidence_aa = 1 - (1 - chance) * (1 - visibility) ** k
 
-        #     """Exact Occlusion HVS"""
-        #     confidence_aa = occlusion_hvs[::-1][augmentation_idx]
+            """Exact Occlusion HVS"""
+            confidence_aa = occlusion_hvs[::-1][augmentation_idx]
 
-        # elif augmentation_type == "TranslateY":  # HVS Available
-        #     """Exact Model Accuracy"""
-        #     # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+        elif augmentation_type == "TranslateY":  # HVS Available
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
             
-        #     """Mapping function from Translation HVS"""
-        #     # dim1, dim2 = im.size[0], im.size[1]
-        #     # visibility = random_crop.compute_visibility(
-        #     #     dim1=dim1, dim2=dim2, tx=0, ty=augmentation_magnitude
-        #     # )
-        #     # k = 4               # 2, 4
-        #     # chance = 0.216        # 0.216, 0.1
-        #     # confidence_aa = 1 - (1 - chance) * (1 - visibility) ** k
+            """Mapping function from Translation HVS"""
+            # dim1, dim2 = im.size[0], im.size[1]
+            # visibility = random_crop.compute_visibility(
+            #     dim1=dim1, dim2=dim2, tx=0, ty=augmentation_magnitude
+            # )
+            # k = 4               # 2, 4
+            # chance = 0.216        # 0.216, 0.1
+            # confidence_aa = 1 - (1 - chance) * (1 - visibility) ** k
 
-        #     """Exact Occlusion HVS"""
-        #     confidence_aa = occlusion_hvs[::-1][augmentation_idx]
+            """Exact Occlusion HVS"""
+            confidence_aa = occlusion_hvs[::-1][augmentation_idx]
 
         # elif augmentation_type == "Brightness":
         #     """Custom Sigmoid Function"""
@@ -520,41 +520,41 @@ class CustomTrivialAugmentWide(torch.nn.Module):
         #     )
 
         """K-model for All Augmentations"""
-        self.chance = 0.5
+        # self.chance = 0.5
 
-        if augmentation_type in [
-            "ShearX",
-            "ShearY",
-            "Brightness",
-            "Color",
-            "Contrast",
-            "Sharpness",
-        ]:
-            max_magnitude = 0.99
-        elif augmentation_type in ["TranslateX", "TranslateY"]:
-            max_magnitude = 32.0
-        elif augmentation_type == "Rotate":
-            max_magnitude = 135.0
-        elif augmentation_type == "Posterize":
-            max_magnitude = 8
-        elif augmentation_type == "Solarize":
-            max_magnitude = 255.0
-        else:
-            max_magnitude = 1.0
+        # if augmentation_type in [
+        #     "ShearX",
+        #     "ShearY",
+        #     "Brightness",
+        #     "Color",
+        #     "Contrast",
+        #     "Sharpness",
+        # ]:
+        #     max_magnitude = 0.99
+        # elif augmentation_type in ["TranslateX", "TranslateY"]:
+        #     max_magnitude = 32.0
+        # elif augmentation_type == "Rotate":
+        #     max_magnitude = 135.0
+        # elif augmentation_type == "Posterize":
+        #     max_magnitude = 8
+        # elif augmentation_type == "Solarize":
+        #     max_magnitude = 255.0
+        # else:
+        #     max_magnitude = 1.0
 
-        augmentation_severity = abs(
-            int(augmentation_magnitude / max_magnitude * self.num_magnitude_bins)
-        )
-        if augmentation_type == "Solarize":
-            augmentation_severity = self.num_magnitude_bins - augmentation_severity
+        # augmentation_severity = abs(
+        #     int(augmentation_magnitude / max_magnitude * self.num_magnitude_bins)
+        # )
+        # if augmentation_type == "Solarize":
+        #     augmentation_severity = self.num_magnitude_bins - augmentation_severity
 
-        visibility = comparison_metrics.custom_poly_common(
-            severity=augmentation_severity, max_severity=self.num_magnitude_bins
-        )
+        # visibility = comparison_metrics.custom_poly_common(
+        #     severity=augmentation_severity, max_severity=self.num_magnitude_bins
+        # )
 
-        confidence_aa = (
-            1 - (1 - self.chance) * (1 - visibility) ** self.k
-        )  # The non-linear function
+        # confidence_aa = (
+        #     1 - (1 - self.chance) * (1 - visibility) ** self.k
+        # )  # The non-linear function
 
         # # print(f'\nNum bins: {self.num_magnitude_bins}\tAugmentation info: {augment_info}\tvisibility: {visibility}\tconfidence_aa: {confidence_aa}\n')
         """K-model for All Augmentations"""
