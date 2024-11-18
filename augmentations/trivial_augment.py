@@ -546,7 +546,6 @@ class CustomTrivialAugmentWide(torch.nn.Module):
             int(augmentation_magnitude / max_magnitude * self.num_magnitude_bins)
         )
 
-        print(f'Severity: {augmentation_severity}\tAugmentation info: {augment_info}\n')
         if augmentation_type == "Solarize":
             augmentation_severity = self.num_magnitude_bins - augmentation_severity
 
