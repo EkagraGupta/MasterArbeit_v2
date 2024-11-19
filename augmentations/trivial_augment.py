@@ -146,12 +146,12 @@ class CustomTrivialAugmentWide(torch.nn.Module):
         return {
             "Identity": (torch.tensor(0.0), False),
             # "ShearX": (torch.linspace(0.0, 0.99, num_bins), True),
-            "ShearY": (torch.linspace(0.0, 0.99, num_bins), True),
+            # "ShearY": (torch.linspace(0.0, 0.99, num_bins), True),
             # "TranslateX": (torch.linspace(0.0, 32.0, num_bins), True),
             # "TranslateY": (torch.linspace(0.0, 32.0, num_bins), True),
             # "Rotate": (torch.linspace(0.0, 135.0, num_bins), True),
             # "Brightness": (torch.linspace(0.0, 0.99, num_bins), True),
-            # "Color": (torch.linspace(0.0, 0.99, num_bins), True),
+            "Color": (torch.linspace(0.0, 0.99, num_bins), True),
             # "Contrast": (torch.linspace(0.0, 0.99, num_bins), True),
             # "Sharpness": (torch.linspace(0.0, 0.99, num_bins), True),
             # "Posterize": (
