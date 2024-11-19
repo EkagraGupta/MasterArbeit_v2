@@ -320,7 +320,7 @@ def seed_worker(worker_id):
 
 if __name__ == "__main__":
 
-    batch_size = 5
+    batch_size = 25000
     DATASET_NAME = "CIFAR10"
 
     g = torch.Generator()
@@ -349,7 +349,7 @@ if __name__ == "__main__":
     )
     classes = trainset.dataset.classes
     images, labels, confidences = next(iter(trainloader))
-    display_image_grid(images, labels, confidences, batch_size=batch_size, classes=classes)
+    # display_image_grid(images, labels, confidences, batch_size=batch_size, classes=classes)
     print(f"augmentation_magnitude: {confidences[0]}\tconfidence: {confidences[1]}")
 
     # pil = transforms.ToPILImage()
