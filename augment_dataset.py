@@ -320,7 +320,7 @@ def seed_worker(worker_id):
 
 if __name__ == "__main__":
 
-    batch_size = 25000
+    batch_size = 25
     DATASET_NAME = "CIFAR10"
 
     g = torch.Generator()
