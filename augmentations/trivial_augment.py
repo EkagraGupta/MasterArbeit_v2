@@ -318,8 +318,11 @@ class CustomTrivialAugmentWide(torch.nn.Module):
             1 - (1 - self.chance) * (1 - visibility) ** self.k
         )  # The non-linear function
 
-        # if augmentation_type in ["TranslateX", "TranslateY", "Equalize", "AutoContrast", "Brightness"]:
-        #     confidence_aa = 1.0
+        if augmentation_type in ["Brightness", "Color", "Contrast", "Sharpness"] and augmentation_magnitude>0:
+            confidence_aa = 1.0
+
+        if augmentation_type in ["TranslateX", "TranslateY", "Equalize", "AutoContrast"]:
+            confidence_aa = 1.0
         """K-model for All Augmentations"""
         
         confidence_aa = torch.from_numpy(
