@@ -280,46 +280,214 @@ class CustomTrivialAugmentWide(torch.nn.Module):
                     augmentation_idx = i
                     break
 
-        """K-model for All Augmentations"""
         self.chance = 0.5
 
-        if augmentation_type in [
-            "ShearX",
-            "ShearY",
-            "Brightness",
-            "Color",
-            "Contrast",
-            "Sharpness",
-        ]:
-            max_magnitude = 0.99
-        elif augmentation_type in ["TranslateX", "TranslateY"]:
-            max_magnitude = 32.0
-        elif augmentation_type == "Rotate":
-            max_magnitude = 135.0
+        if augmentation_type == "ShearX":
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+
+            """Mapping function from Rotation HVS"""
+            k = 3  # 1.5, 3
+            chance = 0.224  # 0.224, 0.1
+            confidence_aa = 1 - (1 - self.chance) * abs(augmentation_magnitude) ** self.k
+
+            """Mapping function from Translation HVS"""
+            # dim1, dim2 = im.size[0], im.size[1]
+            # visibility = random_crop.compute_visibility(
+            #     dim1=dim1, dim2=dim2, tx=0., ty=augmentation_magnitude
+            # )
+            # k = 2
+            # chance = 0.224          # taken from model acc
+            # confidence_aa = 1 - (1 - chance) * (1 - visibility) ** k
+
+            """Exact Rotation HVS"""
+            # confidence_aa = rotation_hvs[augmentation_idx]
+
+        elif augmentation_type == "ShearY":
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+
+            """Mapping function from Rotation HVS"""
+            k = 3  # 1.5, 3
+            chance = 0.226  # 0.226, 0.1
+            confidence_aa = 1 - (1 - self.chance) * abs(augmentation_magnitude) ** self.k
+
+            """Mapping function from Translation HVS"""
+            # dim1, dim2 = im.size[0], im.size[1]
+            # visibility = random_crop.compute_visibility(
+            #     dim1=dim1, dim2=dim2, tx=0., ty=augmentation_magnitude
+            # )
+            # k = 2
+            # chance = 0.224
+            # confidence_aa = 1 - (1 - chance) * (1 - visibility) ** k
+
+            """Exact Rotation HVS"""
+            # confidence_aa = rotation_hvs[augmentation_idx]
+
+        if augmentation_type == "TranslateX":  # HVS Available
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+
+            """Mapping function from Translation HVS"""
+            dim1, dim2 = im.size[0], im.size[1]
+            visibility = random_crop.compute_visibility(
+                dim1=dim1, dim2=dim2, tx=augmentation_magnitude, ty=0
+            )
+            k = 4               # 2, 4
+            chance = 0.216        # 0.102, 0.216 
+            confidence_aa = 1 - (1 - self.chance) * (1 - visibility) ** self.k
+
+            """Exact Occlusion HVS"""
+            # confidence_aa = occlusion_hvs[::-1][augmentation_idx]
+
+        elif augmentation_type == "TranslateY":  # HVS Available
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+            
+            """Mapping function from Translation HVS"""
+            dim1, dim2 = im.size[0], im.size[1]
+            visibility = random_crop.compute_visibility(
+                dim1=dim1, dim2=dim2, tx=0, ty=augmentation_magnitude
+            )
+            k = 4               # 2, 4
+            chance = 0.216        # 0.102, 0.216
+            confidence_aa = 1 - (1 - self.chance) * (1 - visibility) ** self.k
+
+            """Exact Occlusion HVS"""
+            # confidence_aa = occlusion_hvs[::-1][augmentation_idx]
+
+        elif augmentation_type == "Brightness":
+
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+
+            """Mapping function from Contrast HVS"""
+            k_neg, k_pos = 20, 3                # (3, 2), (20, 3) 
+            chance_pos = 0.86                   # model_acc[-1]
+            chance_neg = 0.32                   # 0.102, 0.32
+            if augmentation_magnitude>0.0:
+                # confidence_aa = 1 - (1 - self.chance) * (augmentation_magnitude) ** self.k
+                confidence_aa = 1.0
+            else:
+                confidence_aa = 1 - (1 - self.chance) * (abs(augmentation_magnitude)) ** self.k
+
+            """Exact Contrast HVS"""
+            # if augmentation_magnitude>0.0:
+            #     confidence_aa = 1.0
+            # else:
+            #     confidence_aa = contrast_hvs[::-1][augmentation_idx]
+
+        elif augmentation_type == "Contrast":  # HVS Available
+
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+
+            """Mapping function from Contrast HVS"""
+            k_neg, k_pos = 20, 3                # (3, 2), (20, 3) 
+            chance_pos = 0.976                   # model_acc[-1]
+            chance_neg = 0.32                   # 0.102, 0.32
+            if augmentation_magnitude>0.0:
+                # confidence_aa = 1 - (1 - chance_pos) * (augmentation_magnitude) ** k_pos
+                confidence_aa = 1.0
+            else:
+                confidence_aa = 1 - (1 - self.chance) * (abs(augmentation_magnitude)) ** self.k
+
+            """Exact Contrast HVS"""
+            # if augmentation_magnitude>0.0:
+            #     confidence_aa = 1.0
+            # else:
+            #     confidence_aa = contrast_hvs[::-1][augmentation_idx]
+
+        elif augmentation_type == "Color":
+
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+
+            """Mapping function from Model Accuracy"""
+            k = 5                       # 2, 5   
+            chance = 0.95               # 0.1, 0.95   
+            if augmentation_magnitude>0.0:
+                confidence_aa = 1.0
+            else:
+                confidence_aa = 1 - (1 - self.chance) * (abs(augmentation_magnitude)) ** self.k
+
+            """Exact Contrast HVS"""
+            # if augmentation_magnitude>0.0:
+            #     confidence_aa = 1.0
+            # else:
+            #     confidence_aa = contrast_hvs[::-1][augmentation_idx]
+
+        elif augmentation_type == "Sharpness":
+
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+
+            """Mapping function from Model Accuracy"""
+            k = 7                       # 2, 7   
+            chance = 0.884               # 0.1, 0.884   
+            if augmentation_magnitude>0.0:
+                confidence_aa = 1.0
+            else:
+                confidence_aa = 1 - (1 - self.chance) * (abs(augmentation_magnitude)) ** self.k
+
+            """Exact Contrast HVS"""
+            # if augmentation_magnitude>0.0:
+            #     confidence_aa = 1.0
+            # else:
+            #     confidence_aa = contrast_hvs[::-1][augmentation_idx]
+
         elif augmentation_type == "Posterize":
-            max_magnitude = 8
+            """Image Similarity Metric"""
+            # confidence_aa = comparison_metrics.multiscale_structural_similarity(
+            #     im, augment_im
+            # )
+
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+
+            """Mapping function from Model Accuracy"""
+            augmentation_magnitude_normalized = float(augmentation_magnitude // 8.0)
+            k = 2           # 1.5, 2
+            chance = 0.86   # 0.1, 0.86
+            confidence_aa = 1 - (1 - self.chance) * (1 - augmentation_magnitude_normalized) ** self.k
+
         elif augmentation_type == "Solarize":
-            max_magnitude = 255.0
-        else:
-            max_magnitude = 1.0
+            """Image Similarity Metric"""
+            # confidence_aa = comparison_metrics.spatial_correlation_coefficient(
+            #     im, augment_im
+            # )
 
-        augmentation_severity = abs(
-            int(augmentation_magnitude / max_magnitude * self.num_magnitude_bins)
-        )
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
 
-        if augmentation_type == "Solarize":
-            augmentation_severity = self.num_magnitude_bins - augmentation_severity
+            """Mapping function from Model Accuracy"""
+            augmentation_magnitude_normalized = augmentation_magnitude / 255.0
+            k = 2           # 1.5, 2
+            chance = 0.512  # 0.1, 0.512
+            confidence_aa = 1 - (1 - self.chance) * (1 - augmentation_magnitude_normalized) ** self.k
 
-        visibility = comparison_metrics.custom_poly_common(
-            severity=augmentation_severity, max_severity=self.num_magnitude_bins
-        )
+        elif augmentation_type == "Rotate":  # HVS Available
 
-        confidence_aa = (
-            1 - (1 - self.chance) * (1 - visibility) ** self.k
-        )  # The non-linear function
+            """Exact Model Accuracy"""
+            # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
 
-        if augmentation_type in ["Brightness", "Color", "Contrast", "Sharpness"] and augmentation_magnitude>0:
-            confidence_aa = 1.0
+            """Mapping function from Rotation HVS"""
+            k = 3  # 2, 3
+            chance = 0.9315 # 0.2, 0.9315
+            confidence_aa = 1 - (1 - self.chance) * (abs(augmentation_magnitude) / 135.0) ** self.k
+
+            """Exact Rotation HVS"""
+            confidence_aa = rotation_hvs[augmentation_idx]
+
+        # elif augmentation_type == "Equalize":
+        #     # confidence_aa = comparison_metrics.multiscale_structural_similarity(
+        #     #     im, augment_im
+        #     # )
+        #     confidence_aa = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
+        # elif augmentation_type == "AutoContrast":
+        #     confidence_aa = comparison_metrics.multiscale_contrast_similarity(
+        #         im, augment_im
+        #     )
 
         if augmentation_type in ["TranslateX", "TranslateY", "Equalize", "AutoContrast"]:
             confidence_aa = 1.0
