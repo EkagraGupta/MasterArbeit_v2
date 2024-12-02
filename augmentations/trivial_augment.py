@@ -148,10 +148,10 @@ class CustomTrivialAugmentWide(torch.nn.Module):
             # "ShearX": (torch.linspace(0.0, 0.99, num_bins), True),
             # "ShearY": (torch.linspace(0.0, 0.99, num_bins), True),
             # "TranslateX": (torch.linspace(0.0, 32.0, num_bins), True),
-            "TranslateY": (torch.linspace(0.0, 32.0, num_bins), True),
+            # "TranslateY": (torch.linspace(0.0, 32.0, num_bins), True),
             # "Rotate": (torch.linspace(0.0, 135.0, num_bins), True),
             # "Brightness": (torch.linspace(0.0, 0.99, num_bins), True),
-            # "Color": (torch.linspace(0.0, 0.99, num_bins), True),
+            "Color": (torch.linspace(0.0, 0.99, num_bins), True),
             # "Contrast": (torch.linspace(0.0, 0.99, num_bins), True),
             # "Sharpness": (torch.linspace(0.0, 0.99, num_bins), True),
             # "Posterize": (
@@ -477,7 +477,7 @@ class CustomTrivialAugmentWide(torch.nn.Module):
             confidence_aa = 1 - (1 - self.chance) * (abs(augmentation_magnitude) / 135.0) ** self.k
 
             """Exact Rotation HVS"""
-            confidence_aa = rotation_hvs[augmentation_idx]
+            # confidence_aa = rotation_hvs[augmentation_idx]
 
         # elif augmentation_type == "Equalize":
         #     # confidence_aa = comparison_metrics.multiscale_structural_similarity(
