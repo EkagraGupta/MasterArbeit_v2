@@ -3,7 +3,7 @@ from PIL import Image
 from typing import Optional
 import numpy as np
 
-from utils import comparison_metrics
+# from utils import comparison_metrics
 from augmentations.random_crop import RandomCrop
 
 import math
