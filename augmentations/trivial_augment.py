@@ -3,7 +3,7 @@ from PIL import Image
 from typing import Optional
 import numpy as np
 
-# from utils import comparison_metrics
+from utils import comparison_metrics
 from augmentations.random_crop import RandomCrop
 
 import math
@@ -279,8 +279,6 @@ class CustomTrivialAugmentWide(torch.nn.Module):
                 if round(abs(augmentation_magnitude), 5) == round(mags[0][i].item(), 5):
                     augmentation_idx = i
                     break
-
-        self.chance = 0.5
 
         if augmentation_type == "ShearX":
             """Exact Model Accuracy"""
