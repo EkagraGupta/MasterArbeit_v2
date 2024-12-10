@@ -448,7 +448,6 @@ class CustomTrivialAugmentWide(torch.nn.Module):
             k = 2           # 1.5, 2
             chance = 0.86   # 0.1, 0.86
             confidence_aa = 1 - (1 - self.chance) * (1 - augmentation_magnitude_normalized) ** self.k
-            print(f"augmentation_magnitude: {augmentation_magnitude}\tnormalized: {augmentation_magnitude_normalized}\tconfidence_aa: {confidence_aa}")
 
         elif augmentation_type == "Solarize":
             """Image Similarity Metric"""
