@@ -154,11 +154,11 @@ class CustomTrivialAugmentWide(torch.nn.Module):
             # "Color": (torch.linspace(0.0, 0.99, num_bins), True),
             # "Contrast": (torch.linspace(0.0, 0.99, num_bins), True),
             # "Sharpness": (torch.linspace(0.0, 0.99, num_bins), True),
-            # "Posterize": (
-            #     8 - (torch.arange(num_bins) / ((num_bins - 1) / 6)).round().int(),
-            #     False,
-            # ),
-            "Solarize": (torch.linspace(255.0, 0.0, num_bins), False),
+            "Posterize": (
+                8 - (torch.arange(num_bins) / ((num_bins - 1) / 6)).round().int(),
+                False,
+            ),
+            # "Solarize": (torch.linspace(255.0, 0.0, num_bins), False),
             # "AutoContrast": (torch.tensor(0.0), False),
             # "Equalize": (torch.tensor(0.0), False),
         }
@@ -444,10 +444,11 @@ class CustomTrivialAugmentWide(torch.nn.Module):
             # confidence_aa, _ = model_accuracy_mapping(augmentation_magnitude, augmentation_type)
 
             """Mapping function from Model Accuracy"""
-            augmentation_magnitude_normalized = float(augmentation_magnitude // 8.0)
+            augmentation_magnitude_normalized = float(augmentation_magnitude / 8.0)
             k = 2           # 1.5, 2
             chance = 0.86   # 0.1, 0.86
             confidence_aa = 1 - (1 - self.chance) * (1 - augmentation_magnitude_normalized) ** self.k
+            print(f"augmentation_magnitude: {augmentation_magnitude}\tnormalized: {augmentation_magnitude_normalized}\tconfidence_aa: {confidence_aa}")
 
         elif augmentation_type == "Solarize":
             """Image Similarity Metric"""
@@ -492,7 +493,7 @@ class CustomTrivialAugmentWide(torch.nn.Module):
         """K-model for All Augmentations"""
         
         confidence_aa = torch.from_numpy(
-            np.where(confidence_aa < self.chance, self.chance, confidence_aa)
+            np.where(confidence_aa < 0.5, 0.5, confidence_aa)
         )
 
         if self.dataset_name=="Tiny-ImageNet":
