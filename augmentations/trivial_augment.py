@@ -145,9 +145,9 @@ class CustomTrivialAugmentWide(torch.nn.Module):
     def _augmentation_space(self, num_bins: int) -> Dict[str, Tuple[Tensor, bool]]:
         return {
             "Identity": (torch.tensor(0.0), False),
-            "ShearX": (torch.linspace(0.0, 0.99, num_bins), True),
+            # "ShearX": (torch.linspace(0.0, 0.99, num_bins), True),
             # "ShearY": (torch.linspace(0.0, 0.99, num_bins), True),
-            # "TranslateX": (torch.linspace(0.0, 32.0, num_bins), True),
+            "TranslateX": (torch.linspace(0.0, 32.0, num_bins), True),
             # "TranslateY": (torch.linspace(0.0, 32.0, num_bins), True),
             # "Rotate": (torch.linspace(0.0, 135.0, num_bins), True),
             # "Brightness": (torch.linspace(0.0, 0.99, num_bins), True),
